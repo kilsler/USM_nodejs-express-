@@ -14,9 +14,12 @@
 
 ## Примеры использования проекта 
 
-<img width="1916" height="1079" alt="image" src="https://github.com/user-attachments/assets/08d8a828-1087-4ee1-a14c-33e973bacf98" />  
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/8c70ccc1-d9b0-49bf-9690-12925ab6e226" />  
-<img width="1917" height="1079" alt="image" src="https://github.com/user-attachments/assets/35c15b04-92d2-4a28-a38b-c0796b0f2cdd" />  
+<img width="1915" height="1077" alt="image" src="https://github.com/user-attachments/assets/ebbcba60-180b-44ca-9237-462673e2f755" />  
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/385e60b6-cdf5-43e3-9cf3-60e91b4228e1" />  
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/a44215f3-56f9-46fc-a85a-baf39208a7a0" />  
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/113c4f69-91aa-4dd7-8c97-d2b12e130a3e" />  
+
+
 
 ## Ответы на контрольные вопросы
 1. Чем отличаются HTML-маршруты от REST API?  
