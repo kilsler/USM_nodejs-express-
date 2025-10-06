@@ -12,15 +12,12 @@
 3. Переключения статуса задачи (выполнена/не выполнена).
 4. Удаления задачи.
 
-
-  
-
 ## Примеры использования проекта 
 
+<img width="1916" height="1079" alt="image" src="https://github.com/user-attachments/assets/08d8a828-1087-4ee1-a14c-33e973bacf98" />  
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/8c70ccc1-d9b0-49bf-9690-12925ab6e226" />  
+<img width="1917" height="1079" alt="image" src="https://github.com/user-attachments/assets/35c15b04-92d2-4a28-a38b-c0796b0f2cdd" />  
 
-
-
-  
 ## Ответы на контрольные вопросы
 1. Чем отличаются HTML-маршруты от REST API?  
    HTML-маршруты отдают готовые маршруты, REST API отдают данные в формате json.
