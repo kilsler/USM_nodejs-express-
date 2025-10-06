@@ -3,7 +3,12 @@ let todos = [
     { id: 2, title: "Сделать лабораторную", completed: true },
 ];
 
-export function getAll() {
+export function getAll(status = 'all') {
+    if (status === 'active') {
+        return todos.filter(t => !t.completed);
+    } else if (status === 'completed') {
+        return todos.filter(t => t.completed);
+    }
     return todos;
 }
 
@@ -21,3 +26,4 @@ export function toggle(id) {
 export function remove(id) {
     todos = todos.filter(t => t.id !== Number(id));
 }
+
