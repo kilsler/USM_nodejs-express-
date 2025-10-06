@@ -1,8 +1,9 @@
 import { getAll, add, toggle, remove } from "../model/toDo.js";
 
 export function listTodos(req, res) {
-    const todos = getAll();
-    res.render("index", { title: "Список задач", todos });
+    const status = req.query.status;
+    const todos = getAll(status);
+    res.render("index", { title: "Список задач", todos, status });
 }
 
 export function showNewForm(req, res) {
@@ -26,3 +27,4 @@ export function deleteTodo(req, res) {
     remove(req.params.id);
     res.redirect("/");
 }
+
