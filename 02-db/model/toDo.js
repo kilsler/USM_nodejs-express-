@@ -50,3 +50,29 @@ export async function remove(id) {
     const [result] = await pool.query('DELETE FROM todos WHERE id = ?', [id]);
     return result.affectedRows > 0;
 }
+
+////////
+import pool from '../db/pool.js';
+
+export async function getAllUsers() {
+  const res = await pool.query('SELECT * FROM users');
+  return res.rows;
+}
+
+export async function getUserById(id) {
+  const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  return res.rows[0]; // возвращаем первый (и единственный) результат
+}
+
+export async function addUser(name, email) {
+  await pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email]);
+}
+
+export async function getUserById(id) {
+  const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  return res.rows[0]; // возвращаем первый (и единственный) результат
+}
+
+export async function updateUser(id, name, email) {
+  await pool.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [name, email, id]);
+}
