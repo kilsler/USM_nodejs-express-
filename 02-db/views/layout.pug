@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title #{title}
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css")
+  body
+    header.container.mt-4
+      h1.mb-3.text-primary #{title}
+      nav.mb-3
+        .btn-group
+          a.btn.btn-outline-primary(href='/') Главная
+          a.btn.btn-outline-primary(href='/new') Новая задача
+          a.btn.btn-outline-primary(href='/about') О нас
+      hr
+    .container
+      block content
