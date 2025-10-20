@@ -47,3 +47,32 @@ export async function deleteTodo(req, res) {
         res.status(500).send("Ошибка сервера");
     }
 }
+
+////////
+import { getAllUsers, getUserById, addUser, updateUser } from '../models/user.js';
+
+export async function listUsers(req, res) {
+  const users = await getAllUsers();
+  return res.json(users);
+}
+
+export async function getUser(req, res) {
+  const user = await getUserById(req.params.id);
+  if (user) {
+    return res.json(user);
+  } else {
+    return res.status(404).send('User not found');
+  }
+}
+
+export async function createUser(req, res) {
+  const { name, email } = req.body;
+  await addUser(name, email);
+  return res.status(201).send('User created');
+}
+
+export async function editUser(req, res) {
+  const { name, email } = req.body;
+  await updateUser(req.params.id, name, email);
+  return res.send('User updated');
+}
