@@ -7,6 +7,13 @@
 1. Обработка ошибок
 2. Валидация данных
 3. Логгирование
+
+## Условия по запуску проекта
+1. Скачайте проект
+2. Запустите контейнер бд mysql и создайте файл ```.env``` согласно примеру
+3. npm install
+4. npm run dev  
+   Готово
 ## Выполнение 
 ### Обработка ошибок
 Для классификации ошибок были созданы собственные классы  
@@ -137,6 +144,13 @@ export const loginValidator = [
 1. Ошибки
 2. Вход пользователей
 Логи созраняются в разные файлы и имеют разную структуру.
+## Скриншоты выполнения
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/805a96d2-c9bd-4380-8383-e6201001d7ef" />  
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/dc3bd8b1-74c1-4c23-b39d-fe55cf492c00" />  
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/d1524615-cc22-419b-842d-3a9c4538d6f9" />  
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/340701dc-6351-4175-8537-c35e90dfbe4f" />
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/03d552a3-0ad5-48d8-a469-5e15dd2fe0a0" />  
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/757c4388-2279-4d9d-a397-6042a46a32a7" />  
 
 ## Контрольные вопросы
 1. Какие преимущества централизованной обработки ошибок в Express? Централизованная обработка ошибок в Express обеспечивает единый формат ответов, устраняет дублирование try/catch и упрощает логирование.
