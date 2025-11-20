@@ -4,26 +4,132 @@
 Целью данной лабораторной работы является изучение методов обработки ошибок, валидации данных и логгирования в приложениях на Node.JS с использованием Express.
 ## Условие
 Реализовать следующие пункты: 
-1.Обработка ошибок
-2.Валидация данных
-3.Логгирование
+1. Обработка ошибок
+2. Валидация данных
+3. Логгирование
 ## Выполнение 
 ### Обработка ошибок
+Для классификации ошибок были созданы собственные классы  
+<img width="312" height="170" alt="image" src="https://github.com/user-attachments/assets/d0e58992-82b1-419e-a39b-56584d783c0e" />  
+Основной класс ошибки
+```js
+export class AppError extends Error {
+    constructor(message, statusCode = 500, isOperational = true) {
+        super(message);
+        this.statusCode = statusCode;
+        this.isOperational = isOperational;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
+```
+Кастомный класс для более специфичной записи ошибки 
+```js
+import { AppError } from './AppError.js';
 
+export class ValidationError extends AppError {
+    constructor(message = 'Validation failed', errors = []) {
+        super(message, 400);
+        this.errors = errors;
+    }
+}
+```
+Классы UnathorizedError.js , NotFound.js, DatabaseError,js , AuthenticationError.js так же расширяют класс AppError с целью более специфичной записи ошибки.  
+Для обработки ошибок был создан мидлвейр errorHandler.js целью которого является запись ошибок в консоль, отправка ошибки пользователю и создания лога о ошибки при помощи логгера.  
+```js
+import { AppError } from '../errors/AppError.js';
+import { logger } from '../utils/logger.js';
+
+const errorHandler = (err, req, res, next) => {
+
+    const isOperational = err.isOperational !== false;
+    const statusCode = err.statusCode || 500;
+    const message =
+        statusCode === 500
+            ? 'Internal Server Error'
+            : err.message || 'Error';
+
+    logger.error("Request failed", {
+        message: err.message,
+        statusCode,
+        stack: err.stack,
+        isOperational,
+        method: req.method,
+        url: req.originalUrl,
+        ip: req.ip,
+        userAgent: req.get("User-Agent"),
+        userId: req.user?.id || null,
+        validationErrors: err.errors || null,
+        errorType: err.constructor.name,
+    });
+
+    if (err instanceof AppError) {
+        return res.status(err.statusCode).json({
+            status: "error",
+            message: err.message,
+            ...(err.errors && { errors: err.errors }),
+        });
+    }
+
+    console.error('Error :', err);
+
+
+    res.status(statusCode).json({
+        status: "error",
+        message,
+        ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    });
+};
+
+export default errorHandler;
+```  
 ### Валидация данных
+Для валидации данных был использован ``` express-validator ```.
+Были созданы схемы для : Пользователй(вход и регистрация), для задач todo(создание и изменение).
+Пример сеозданная схема для пользователя:
+```js
+export const validate = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const errorDetails = errors.array().map(err => ({
+            field: err.param,
+            message: err.msg,
+        }));
+        throw new ValidationError("Validation failed", errorDetails);
+    }
+    next();
+};
 
+export const registerValidator = [
+    body('username')
+        .trim()
+        .isLength({ min: 2, max: 50 })
+        .withMessage('username should have at least 2 to 50 symbols '),
+
+    body('email')
+        .isEmail()
+        .withMessage('invalid email')
+        .normalizeEmail(),
+
+    body('password')
+        .isLength({ min: 6 })
+        .withMessage('password must have at least 6 symbols')
+        .matches(/\d/)
+        .withMessage('password must have at least 1 number')
+        .matches(/[A-Z]/)
+        .withMessage('password must have at least 1 Uppercase letter'),
+    validate
+];
+
+export const loginValidator = [
+    body('email')
+        .isEmail()
+        .withMessage('Enter valid email')
+        .normalizeEmail(),
+    body('password')
+        .notEmpty()
+        .withMessage('Password is required'),
+    validate
+];
+```
 ### Логгирование 
 ## Контрольные вопросы
-Что такое JWT и как он работает?  
-JWT - json web token состоит из 3 частей (header,payload, sinature). При отправке логина и пароль от клиента, сервер генеирует токен и подписывает его секретным ключем. Пользователь сохраняет полученный токен в localstorage/cookie и отправляет его вместе со всеми последующими запросами.  
-Как реализовать безопасное хранение паролей пользователей?  
-Хранить хэши паролей.  
-В чём разница между аутентификацией и авторизацией?  
-Аутентификация это проверка пользователя(в основном логин и пароль), авторизация это проверка прав пользователя(что он может делать на сайте).  
-Какие преимущества и недостатки использования Passport.js для аутентификации в Node.js  
-Плюсы:  
-Имплементированы сразу множество разных подходов(jwt, sessions, google )  
-Легкая интеграция в проект.  
-Минимальное количество кода.  
-Минусы:  
-Сложная настройка.  
