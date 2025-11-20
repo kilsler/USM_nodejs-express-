@@ -6,7 +6,7 @@ import { AppError } from "../errors/AppError.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const LOGS_PATH = path.join(__dirname, "../logs/combined.log");
+const LOGS_PATH = path.join(__dirname, "../logs/error.log");
 
 const DEFAULT_LINES = 100;
 
