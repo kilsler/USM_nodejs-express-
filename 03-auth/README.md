@@ -85,6 +85,9 @@ export function authenticateToken(req, res, next) {
 }
 ```
 ## Проверка 
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/5c365788-b5d2-4107-aeed-1c5f4d486d15" />  
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/90cd033f-3744-4224-9878-9b9c800fbe8c" />  
+<img width="893" height="665" alt="image" src="https://github.com/user-attachments/assets/06cbaa26-9178-476d-aeca-8f2b496ba643" />  
 
 ## Контрольные вопросы
 Что такое JWT и как он работает?  
