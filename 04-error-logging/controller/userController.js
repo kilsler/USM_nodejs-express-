@@ -6,6 +6,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import { AppError } from "../errors/AppError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
+import { userLogger } from "../utils/userLogger.js";
 
 dotenv.config();
 
@@ -20,6 +21,11 @@ export const register = asyncHandler(async function (req, res) {
     }
     const password_hash = bcrypt.hashSync(password, 10);
     const user = await createUser(username, email, password_hash);
+    userLogger.info("User registered", {
+        userId: user.id,
+        username: user.username,
+        email: user.email,
+    })
     res.status(201).json({
         status: "success",
         message: "User registered successfully",
@@ -49,7 +55,11 @@ export const login = asyncHandler(async function (req, res) {
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
     );
-
+    userLogger.info("User logged in", {
+        userId: user.id,
+        username: user.username,
+        email: user.email,
+    })
     res.json({
         status: "success",
         message: "Login successful",
