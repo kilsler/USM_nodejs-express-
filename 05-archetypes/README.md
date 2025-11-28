@@ -13,35 +13,100 @@
 4. npm run dev  
    Готово
 ## Выполнение 
-### Добавление нового модуля для вебсокета
+### Добавление нового модуля для вебсокета 
+``` js
+//app.js
+const server = http.createServer(app);
+
+initWebSocket(server);
+```
+
+```js
+import { Server } from "socket.io";
+import { authenticateTokenAdminSocket } from "../middlewares/authSocket.js";
+
+let io;
+
+export const initWebSocket = (server) => {
+    io = new Server(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST"],
+            credentials: true
+        }
+    });
+
+    io.use(authenticateTokenAdminSocket);
+
+    io.on("connection", (socket) => {
+        console.log("Admin connected via WS:", socket.user.email);
+
+        socket.join("logs-room");
+
+        socket.on("disconnect", () => {
+            console.log("Admin disconnected");
+        });
+    });
+};
+
+export const getIo = () => io;
+
+
+```
+
 ### Добавление модуля для уатентификации с вебсокетом
+
+
+```js
+
+dotenv.config();
+
+const verifyJwtToken = (token) => {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+        throw new AuthenticationError("Invalid or expired token.");
+    }
+};
+
+export const authenticateTokenAdminSocket = (socket, next) => {
+    try {
+        const token = socket.handshake.auth?.token;
+
+        if (!token) return next(new AuthenticationError("Access denied. No token provided"));
+
+        const user = verifyJwtToken(token);
+
+        if (user.role !== "admin") {
+            return next(new UnauthorizedError("Admin role required"));
+        }
+
+        socket.user = user;
+        next();
+
+    } catch (err) {
+        next(err);
+    }
+};
+
+```
 ### Изменение логики логирования с добавлением оповещения вебсокетом 
 
+```js
+function emitToWebsocket(event, payload) {
+    const io = getIo();
+    if (io) io.to("logs-room").emit(event, payload);
+}
+
+logger.on("data", log => {
+    if (log.level === "error") emitToWebsocket("new-error-log", log);
+    emitToWebsocket("new-combined-log", log);
+});
+```
 
 ## Скриншоты выполнения
 
 ## Контрольные вопросы
-1. Какие преимущества централизованной обработки ошибок в Express? Централизованная обработка ошибок в Express обеспечивает единый формат ответов, устраняет дублирование try/catch и упрощает логирование.
-2. Какие категории логов вы решили вести в системе и чем обусловлен ваш выбор? Мы ведём error.log (критические ошибки) и users.log (аудит входов/регистраций) — для быстрого поиска багов и соответствия требованиям безопасности.
-3. Какие существуют подходы к валидации данных в Express и какие из них вы использовали? Используем express-validator с кастомным middleware, который кидает ValidationError — это даёт мощную валидацию и единый обработчик ошибок без ручных проверок.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Контрольные вопросы
-
 Вопрос :В чём основные отличия REST от выбранного вами типа Web-API (GraphQL / WebSockets / WebHooks / SOAP)  
 Ответ:  
 Вопрос :В каких случаях использование вашего типа API даёт преимущество по сравнению с REST (по производительности, удобству, гибкости и т.д.)?  
